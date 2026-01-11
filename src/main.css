@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  transition: all 0.5s;
+}
+
+body {
+  font-family: "Rubik", sans-serif;
+  color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  animation: changeBg 50s infinite;
+}
+body::after {
+  position: fixed;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: -1;
+}
+@keyframes changeBg {
+  0% {
+    background-image: url("./img/1.jpg");
+  }
+  25% {
+    background-image: url("./img/2.jpg");
+  }
+  50% {
+    background-image: url("./img/3.jpg");
+  }
+  75% {
+    background-image: url("./img/4.jpg");
+  }
+  100% {
+    background-image: url("./img/5.jpg");
+  }
+}

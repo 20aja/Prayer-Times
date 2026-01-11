@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./main.js" defer></script>
+    <script src="./axios.min.js"></script>
+    <link rel="stylesheet" href="./all.min.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="container mx-auto p-6 relative">
+      <div
+        class="flex items-center justify-between border border-amber-50 rounded-2xl p-4 relative">
+        <div class="flex items-center space-x-2 font-bold text-xl md:text-2xl">
+          <h1>الصـــوفِيُّ</h1>
+          <i class="fa-solid fa-mosque text-green-400"></i>
+        </div>
+        <div class="space-x-2 md:space-x-4">
+          <button id="bars" class="text-2xl cursor-pointer hover:text-sky-600">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <button
+            id="gpsBtn"
+            class="text-2xl cursor-pointer hover:text-red-400">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </button>
+          <button class="text-2xl cursor-pointer hover:text-sky-900">
+            <i class="fa-solid fa-address-card"></i>
+          </button>
+          <ul
+            id="cityList"
+            class="absolute -bottom-70 left-30 w-30 h-72 overflow-y-auto rounded-lg border border-amber-50 bg-slate-800 text-white cursor-pointer hidden">
+            <!-- نينوى -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة الموصل
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.3400,43.1300">
+              الموصل
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.3566,42.4499">
+              تلعفر
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.3209,41.8765">
+              سنجار
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.5156,42.6931">
+              بعشيقة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.8700,43.3200">
+              الحمدانية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.7981,43.2937">
+              القيارة
+            </li>
+
+            <!-- بغداد -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة بغداد
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.3153,44.3661">
+              بغداد
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.3128,44.3615">
+              الكرخ
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.3250,44.4220">
+              الرصافة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.4000,44.3500">
+              الأعظمية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.3500,44.4200">
+              مدينة صدام
+            </li>
+
+            <!-- البصرة -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة البصرة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="30.5150,47.8100">
+              البصرة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="30.3895,47.7057">
+              الزبير
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="30.9800,47.4500">
+              القرنة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="29.9700,48.4700">
+              الفاو
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="30.4300,47.9300">
+              أبو الخصيب
+            </li>
+
+            <!-- الأنبار -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة الرمادي
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.4309,43.2951">
+              الرمادي
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.3550,43.7833">
+              الفلوجة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.6400,42.8300">
+              هيت
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.2700,42.4300">
+              كبيسة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="33.2500,42.5500">
+              البغدادي
+            </li>
+
+            <!-- أربيل -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة أربيل
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.1911,44.0092">
+              أربيل
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.4000,44.0500">
+              شقلاوة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.0800,44.6200">
+              كويسنجق
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.7600,43.8800">
+              مخمور
+            </li>
+
+            <!-- السليمانية -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة السليمانية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.5669,45.4161">
+              السليمانية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.1767,45.9867">
+              حلبجة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.2200,45.3200">
+              كلار
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.2500,44.8800">
+              رانية
+            </li>
+
+            <!-- كركوك -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة كركوك
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.4786,44.4019">
+              كركوك
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.3200,43.9200">
+              الحويجة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.0500,44.0800">
+              داقوق
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.6000,44.2000">
+              الدبس
+            </li>
+
+            <!-- بابل -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة بابل
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.4833,44.4333">
+              الحلة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.7800,44.2800">
+              المسيب
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.6800,44.4200">
+              المحاويل
+            </li>
+
+            <!-- كربلاء -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة كربلاء
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.6167,44.0333">
+              كربلاء
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.6800,43.9800">
+              الهندية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.6000,43.5000">
+              عين التمر
+            </li>
+
+            <!-- النجف -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة النجف
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.0000,44.3300">
+              النجف
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.0400,44.4200">
+              الكوفة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.9500,44.5000">
+              المناذرة
+            </li>
+
+            <!-- واسط -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة الكوت
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.5000,45.8200">
+              الكوت
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.1400,45.2800">
+              الصويرة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.1700,45.8900">
+              الحي
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.3100,45.2500">
+              العزيزية
+            </li>
+
+            <!-- ذي قار -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة الناصرية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.0500,46.2600">
+              الناصرية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="30.9000,46.2200">
+              سوق الشيوخ
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.2400,46.1700">
+              الشطرة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.7700,46.0500">
+              الرفاعي
+            </li>
+
+            <!-- المثنى -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة السماوة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.6700,45.2800">
+              السماوة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.8000,45.3500">
+              الرميثة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.6500,45.5000">
+              الخضر
+            </li>
+
+            <!-- القادسية -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة الديوانية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.9900,44.9200">
+              الديوانية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="32.0500,44.9500">
+              عفك
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.9500,44.7500">
+              الشامية
+            </li>
+
+            <!-- صلاح الدين -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة تكريت
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="34.6000,43.6800">
+              تكريت
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="34.2000,43.8700">
+              سامراء
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="34.0700,44.3700">
+              بلد
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="34.0700,44.0800">
+              الدور
+            </li>
+
+            <!-- ميسان -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة العمارة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.8333,47.1500">
+              العمارة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.5700,47.2200">
+              المجر الكبير
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="31.6300,47.0500">
+              الكحلاء
+            </li>
+
+            <!-- دهوك -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة دهوك
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.8667,42.9833">
+              دهوك
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="37.1500,42.6800">
+              زاخو
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="37.0900,43.4900">
+              العمادية
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="36.7414,43.8933">
+              عقرة
+            </li>
+
+            <!-- حلبجة -->
+            <li
+              class="p-2 text-center text-bold bg-slate-900 pointer-events-none border-b">
+              مدينة حلبجة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.1767,45.9867">
+              حلبجة
+            </li>
+            <li
+              class="py-2 px-3 border-b-2 hover:bg-slate-700"
+              data-value="35.2000,46.0500">
+              شارزور
+            </li>
+            <li class="p-2 hover:bg-slate-700" data-value="35.2500,46.2000">
+              بنجوين
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <section>
+      <div
+        class="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6 font-bold">
+        <ul id="timesSection">
+          <li
+            class="flex justify-between items-center bg-slate-900 border border-amber-50 rounded-2xl text-lg md:text-xl py-2 px-3 mb-2">
+            <span id="text">حدد مدينتك من القائمة</span>
+            <span id="region">أو الموقع</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: yellow" class="fa-solid fa-moon"></i
+              >&nbsp;&nbsp;الفجر</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: #7fbfff" class="fa-solid fa-hourglass-half"></i
+              >&nbsp;&nbsp;الإمساك</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: #912900" class="fa-solid fa-sun"></i
+              >&nbsp;&nbsp;الشروق</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2 bg-slate-900">
+            <span
+              ><i style="color: orangered" class="fa-solid fa-clock"></i
+              >&nbsp;&nbsp;الظهر</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: orange" class="fa-solid fa-cloud-sun"></i
+              >&nbsp;&nbsp;العصر</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: #ff4800" class="fa-solid fa-cloud-sun"></i
+              >&nbsp;&nbsp;المغرب</span
+            >
+            <span id="time">00:00</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-3 mb-2">
+            <span
+              ><i style="color: #003d83" class="fa-solid fa-star"></i
+              >&nbsp;&nbsp;العشاء</span
+            >
+            <span id="time">00:00</span>
+          </li>
+        </ul>
+        <ul>
+          <li
+            class="text-center bg-slate-900 border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span id="weekDay">اليوم</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span>الساعة الآن</span>
+            <span id="clock">00:00 AM/PM</span>
+          </li>
+          <li
+            class="text-center bg-slate-900 border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span id="weekDay">التاريخ الهجري</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span id="monthHijri">الشهر</span>
+            <span id="hijri">--------</span>
+          </li>
+          <li
+            class="text-center bg-slate-900 border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span id="weekDay">التاريخ الميلادي</span>
+          </li>
+          <li
+            class="flex justify-between items-center border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span id="monthName">الشهر</span>
+            <span id="dateToday">--------</span>
+          </li>
+          <li
+            class="flex justify-between items-center bg-slate-900 border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span>الصلاة القادمة</span>
+            <span>--------</span>
+          </li>
+          <li
+            class="flex justify-between items-center bg-slate-900 border border-amber-50 rounded-2xl text-xl py-2 px-4 mb-2">
+            <span>الوقت المتبقي</span>
+            <span>00:00:00</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </body>
+</html>
