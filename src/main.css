@@ -48,18 +48,22 @@ body::after {
 
 .next {
   background: #0f172b;
+  border-color: red;
   animation: fade-bg 1.5s ease-in-out infinite;
 }
 
 @keyframes fade-bg {
   0% {
     background: #0f172b;
+    border-color: red;
   }
   50% {
     background: transparent;
+    border-color: transparent;
   }
   100% {
     background: #0f172b;
+    border-color: red;
   }
 }
 

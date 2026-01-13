@@ -1,6 +1,6 @@
 // Global Variables
-let all_times_list = document.querySelectorAll("#timesSection #time");
-let all_data_value = document.querySelectorAll("#timesSection li");
+const all_times_list = document.querySelectorAll("#timesSection #time");
+const all_data_value = document.querySelectorAll("#timesSection li");
 const cityList = document.getElementById("cityList");
 
 // مؤقتات عامة
@@ -189,13 +189,11 @@ function startCountdown(nextPrayer, timezone) {
     const [curHour, curMin, curSec] = formatter.format(now).split(":").map(Number);
     const curTotalSeconds = curHour * 3600 + curMin * 60 + curSec;
     const targetTotalSeconds = h * 3600 + m * 60;
-    // console.log(curTotalSeconds);
-    // console.log(targetTotalSeconds);
 
     let diff = targetTotalSeconds - curTotalSeconds;
 
     if (diff <= 0) {
-      document.getElementById("nextText").textContent = `حان الآن موعد صلاة&nbsp;&nbsp;<i class="fa-solid fa-bell"></i>`;
+      document.getElementById("nextText").textContent = `حان الآن موعد صلاة`;
       document.getElementById("nextext").textContent = prayerNames[nextPrayer.name];
       document.getElementById("addclass").classList.add("next");
       clearInterval(countdownTimer);
@@ -208,6 +206,7 @@ function startCountdown(nextPrayer, timezone) {
 
     // عرض العد التنازلي بصيغة 12 ساعة
     let displayHour = hours % 12;
+    document.getElementById("timeRemaining").style.color = "red"
     document.getElementById("timeRemaining").textContent = `${displayHour}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} `;
   }
   updateCountdown();
