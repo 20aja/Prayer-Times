@@ -45,3 +45,33 @@ body::after {
     background-image: url("./img/5.jpg");
   }
 }
+
+.next {
+  background: #0f172b;
+  animation: fade-bg 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-bg {
+  0% {
+    background: #0f172b;
+  }
+  50% {
+    background: transparent;
+  }
+  100% {
+    background: #0f172b;
+  }
+}
+
+@media (max-width: 450px) {
+  header #headSM {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    border: none;
+    background-color: #0f172b;
+    border-bottom: 1px solid #fff;
+  }
+}
