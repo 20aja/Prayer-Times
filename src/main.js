@@ -2,12 +2,40 @@
 const all_times_list = document.querySelectorAll("#timesSection #time");
 const all_data_value = document.querySelectorAll("#timesSection li");
 const cityList = document.getElementById("cityList");
+const themeToggle = document.getElementById("themeToggle");
 
 // مؤقتات عامة
 let clockTimer = null;
 let countdownTimer = null;
 
 let prayerOrder = ["Fajr", "Imsak", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+// الوضع الليلي/النهاري
+let isDarkMode = localStorage.getItem('darkMode') !== 'false';
+
+function toggleTheme() {
+  isDarkMode = !isDarkMode;
+  localStorage.setItem('darkMode', isDarkMode);
+  updateTheme();
+}
+
+function updateTheme() {
+  if (isDarkMode) {
+    document.body.classList.remove('light-mode');
+    document.body.classList.add('dark-mode');
+    themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.body.classList.add('light-mode');
+    themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  }
+}
+
+// تهيئة الوضع عند تحميل الصفحة
+updateTheme();
+
+// إضافة مستمع لزر تبديل الوضع
+themeToggle.addEventListener('click', toggleTheme);
 
 // أسماء الصلوات بالعربية
 const prayerNames = {
@@ -56,12 +84,16 @@ function formatTo12Hour(timeStr) {
 // عند الضغط على زر اختيار المدينة
 document.getElementById("bars").addEventListener("click", () => {
   cityList.classList.toggle("hidden");
+  setTimeout(() => {
+    cityList.classList.toggle("show");
+  }, 10);
 });
 
 // عند اختيار مدينة من القائمة
 cityList.querySelectorAll("li").forEach((el) => {
   el.addEventListener("click", () => {
     cityList.classList.add("hidden");
+    cityList.classList.remove("show");
     document.getElementById("region").textContent = el.textContent;
     document.getElementById("text").textContent = "مواقيت صلاة";
     const [lat, lng] = el.getAttribute("data-value").split(",");
@@ -85,7 +117,7 @@ document.getElementById("gpsBtn").onclick = () => {
 // Get Prayer Times
 async function get_prayer_times(lat, lng) {
   const response = await axios.get(
-    `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1&school=0
+    `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3&school=0
 `
   );
   // Generator The Main Variables
@@ -103,12 +135,133 @@ async function get_prayer_times(lat, lng) {
   get_current_time(timezone);
   get_next_prayer(timings, timezone);
 
+  // بدء التحديث المستمر للصلاة القادمة
+  startPrayerUpdate(timings, timezone);
+
   // عرض التاريخ
   document.getElementById("weekDay").textContent = weekdaysAr[weekday.en];
   document.getElementById("monthName").textContent = monthsAr[month.en];
   document.getElementById("dateToday").textContent = date;
   document.getElementById("monthHijri").textContent = hijriMonth.ar;
   document.getElementById("hijri").textContent = hijriDate;
+}
+
+// تحميل الموصل كالمدينة الافتراضية عند فتح البرنامج
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("region").textContent = "الموصل";
+  document.getElementById("text").textContent = "مواقيت صلاة";
+  get_prayer_times(36.3400, 43.1300);
+});
+
+// التعامل مع نافذة اتجاه القبلة
+const qiblaBtn = document.getElementById("qiblaBtn");
+const qiblaModal = document.getElementById("qiblaModal");
+const closeQiblaModal = document.getElementById("closeQiblaModal");
+const qiblaDirection = document.getElementById("qiblaDirection");
+const qiblaPointer = document.getElementById("qiblaPointer");
+const phoneDirection = document.getElementById("phoneDirection");
+
+let deviceOrientationHandler = null;
+
+// فتح نافذة اتجاه القبلة
+qiblaBtn.addEventListener("click", () => {
+  qiblaModal.classList.remove("hidden");
+  getQiblaDirection();
+  startDeviceOrientation();
+});
+
+// إغلاق نافذة اتجاه القبلة
+closeQiblaModal.addEventListener("click", () => {
+  qiblaModal.classList.add("hidden");
+  stopDeviceOrientation();
+});
+
+// إغلاق النافذة عند النقر خارجها
+qiblaModal.addEventListener("click", (e) => {
+  if (e.target === qiblaModal) {
+    qiblaModal.classList.add("hidden");
+    stopDeviceOrientation();
+  }
+});
+
+// بدء تتبع اتجاه الجهاز
+function startDeviceOrientation() {
+  if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    // iOS 13+
+    DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response === 'granted') {
+          window.addEventListener('deviceorientation', handleOrientation);
+        } else {
+          alert('يرجى السماح بالوصول إلى البوصلة لتحديد الاتجاه بدقة');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert('حدث خطأ في الوصول إلى البوصلة');
+      });
+  } else if (window.DeviceOrientationEvent) {
+    // Android و iOS القديم
+    window.addEventListener('deviceorientation', handleOrientation);
+  } else {
+    alert('جهازك لا يدعم البوصلة');
+  }
+}
+
+// إيقاف تتبع اتجاه الجهاز
+function stopDeviceOrientation() {
+  if (deviceOrientationHandler) {
+    window.removeEventListener('deviceorientation', deviceOrientationHandler);
+    deviceOrientationHandler = null;
+  }
+}
+
+// معالجة تغير اتجاه الجهاز
+function handleOrientation(event) {
+  const alpha = event.alpha; // اتجاه الجهاز بالنسبة للشمال (0-360)
+  if (alpha !== null) {
+    // تدوير مؤشر اتجاه الهاتف
+    phoneDirection.style.transform = `rotate(${alpha}deg)`;
+    phoneDirection.style.transition = "transform 0.3s ease-out";
+  }
+}
+
+// الحصول على اتجاه القبلة
+async function getQiblaDirection() {
+  try {
+    // الحصول على موقع المستخدم
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+
+    const { latitude, longitude } = position.coords;
+
+    // حساب اتجاه القبلة
+    const qiblaLat = 21.4225; // خط عرض مكة المكرمة
+    const qiblaLng = 39.8262; // خط طول مكة المكرمة
+
+    const latRad = (latitude * Math.PI) / 180;
+    const lngRad = (longitude * Math.PI) / 180;
+    const qiblaLatRad = (qiblaLat * Math.PI) / 180;
+    const qiblaLngRad = (qiblaLng * Math.PI) / 180;
+
+    const y = Math.sin(qiblaLngRad - lngRad);
+    const x = Math.cos(latRad) * Math.tan(qiblaLatRad) - Math.sin(latRad) * Math.cos(qiblaLngRad - lngRad);
+
+    let qiblaAngle = (Math.atan2(y, x) * 180) / Math.PI;
+    qiblaAngle = (qiblaAngle + 360) % 360;
+
+    // عرض اتجاه القبلة
+    qiblaDirection.textContent = `${Math.round(qiblaAngle)}°`;
+
+    // تدوير مؤشر اتجاه القبلة
+    qiblaPointer.style.transform = `rotate(${qiblaAngle}deg)`;
+    qiblaPointer.style.transition = "transform 1s ease-out";
+
+  } catch (error) {
+    qiblaDirection.textContent = "خطأ";
+    alert("لم أتمكن من الحصول على موقعك. يرجى تفعيل خدمة الموقع.");
+  }
 }
 
 // Get The Current Time ⏰
@@ -146,6 +299,15 @@ function get_next_prayer(timings, timezone) {
     if (name === "Imsak" || name === "Sunrise") continue;
     const [hur, min] = timings[name].split(":").map(Number);
     if (hur * 60 + min > curTotal) {
+      nextPrayer = {name, time: timings[name]};
+      break;
+    }
+  }
+
+  // إذا لم يكن هناك صلاة قادمة اليوم، نأخذ صلاة الفجر غداً
+  if (!nextPrayer) {
+    for (const name of prayerOrder) {
+      if (name === "Imsak" || name === "Sunrise") continue;
       nextPrayer = {name, time: timings[name]};
       break;
     }
@@ -192,23 +354,27 @@ function startCountdown(nextPrayer, timezone) {
 
     let diff = targetTotalSeconds - curTotalSeconds;
 
+    // إذا كان الوقت قد مر، نحسب الفرق حتى صلاة الفجر غداً
     if (diff <= 0) {
-      document.getElementById("nextText").textContent = `حان الآن موعد صلاة`;
-      document.getElementById("nextext").textContent = prayerNames[nextPrayer.name];
-      document.getElementById("addclass").classList.add("next");
-      clearInterval(countdownTimer);
-      return;
+      diff += 24 * 60 * 60; // إضافة 24 ساعة
     }
 
     const hours = Math.floor(diff / 3600);
     const minutes = Math.floor((diff % 3600) / 60);
     const seconds = diff % 60;
 
-    // عرض العد التنازلي بصيغة 12 ساعة
-    let displayHour = hours % 12;
-    document.getElementById("timeRemaining").style.color = "red"
-    document.getElementById("timeRemaining").textContent = `${displayHour}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} `;
+    document.getElementById("timeRemaining").textContent = 
+      `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
+
   updateCountdown();
   countdownTimer = setInterval(updateCountdown, 1000);
 }
+
+// تحديث الصلاة القادمة كل دقيقة
+function startPrayerUpdate(timings, timezone) {
+  setInterval(() => {
+    get_next_prayer(timings, timezone);
+  }, 60000); // تحديث كل دقيقة
+}
+
