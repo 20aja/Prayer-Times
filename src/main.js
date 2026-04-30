@@ -218,11 +218,24 @@ function stopDeviceOrientation() {
 
 // معالجة تغير اتجاه الجهاز
 function handleOrientation(event) {
+  // الحصول على قيم البوصلة
   const alpha = event.alpha; // اتجاه الجهاز بالنسبة للشمال (0-360)
+  const beta = event.beta;   // ميل الجهاز للأمام/الخلف (-180 إلى 180)
+  const gamma = event.gamma; // ميل الجهاز لليمين/اليسار (-90 إلى 90)
+
   if (alpha !== null) {
-    // تدوير مؤشر اتجاه الهاتف
+    // تدوير مؤشر اتجاه الهاتف مع حركة سلسة
     phoneDirection.style.transform = `rotate(${alpha}deg)`;
-    phoneDirection.style.transition = "transform 0.3s ease-out";
+    phoneDirection.style.transition = "transform 0.15s ease-out";
+
+    // تحديث زاوية اتجاه القبلة بالنسبة للهاتف
+    const qiblaAngle = parseFloat(qiblaDirection.textContent);
+    if (!isNaN(qiblaAngle)) {
+      const relativeAngle = (qiblaAngle - alpha + 360) % 360;
+      // تدوير مؤشر القبلة ليظهر في الاتجاه الصحيح بالنسبة للهاتف
+      qiblaPointer.style.transform = `rotate(${relativeAngle}deg)`;
+      qiblaPointer.style.transition = "transform 0.15s ease-out";
+    }
   }
 }
 

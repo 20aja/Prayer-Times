@@ -244,19 +244,58 @@ body.light-mode #qiblaModal .fa-kaaba {
 /* تحسين تصميم مؤشرات اتجاه القبلة والهاتف */
 #qiblaPointer {
   z-index: 10;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
 }
 
 #phoneDirection {
   z-index: 20;
+  filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
 }
 
 /* تأثير توهج للمؤشرات */
 #qiblaPointer .bg-amber-400 {
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.9);
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 #phoneDirection .bg-blue-400 {
-  box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.9);
+  animation: pulse-glow 2s ease-in-out infinite 0.5s;
+}
+
+/* تأثير نبض للتوهج */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* تحسين دوائر البوصلة */
+#qiblaModal .border-amber-500\/30 {
+  animation: rotate-border 20s linear infinite;
+}
+
+#qiblaModal .border-amber-500\/50 {
+  animation: rotate-border 15s linear infinite reverse;
+}
+
+#qiblaModal .border-amber-500\/70 {
+  animation: rotate-border 10s linear infinite;
+}
+
+/* تأثير دوران بطيء للدوائر */
+@keyframes rotate-border {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* تحسين المؤشرات في الوضع النهاري */
