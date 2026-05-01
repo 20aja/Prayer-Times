@@ -18,16 +18,7 @@ body {
   background-attachment: fixed;
   animation: changeBg 240s infinite;
 }
-
-body.light-mode {
-  color: #1f2937;
-}
-
-body.light-mode::after {
-  background-color: rgba(243, 244, 246, 0.95);
-}
-
-body.dark-mode::after {
+body::after {
   position: fixed;
   content: "";
   width: 100%;
@@ -57,254 +48,24 @@ body.dark-mode::after {
 }
 
 .next {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
+  background: #0f172b;
+  border-color: red;
+  animation: fade-bg 1.5s ease-in-out infinite;
 }
 
-body.light-mode .next {
-  background: #dbeafe;
-  border-color: #3b82f6;
-}
-
-/* تحسين القائمة المنسدلة */
-#cityList {
-  backdrop-filter: blur(10px);
-  background: rgba(15, 23, 43, 0.95);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  transform: translateY(-10px);
-  opacity: 0;
-  transition: all 0.3s ease;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-#cityList.show {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-#cityList li {
-  transition: all 0.2s ease;
-}
-
-#cityList li:hover {
-  transform: translateX(5px);
-  background: rgba(59, 130, 246, 0.2);
-}
-
-body.light-mode #cityList {
-  background: rgba(255, 255, 255, 0.98);
-  color: #1f2937;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  border-color: #cbd5e1;
-}
-
-body.light-mode #cityList li {
-  border-color: #e2e8f0;
-}
-
-body.light-mode #cityList li.bg-slate-900 {
-  background: #f1f5f9;
-  color: #1f2937;
-}
-
-body.light-mode #cityList li:hover {
-  background: #e2e8f0;
-  color: #0f172a;
-}
-
-/* تحسين العد التنازلي */
-#addclass {
-  position: relative;
-  overflow: hidden;
-}
-
-#timeRemaining {
-  font-family: "Cairo", monospace;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-body.light-mode #timeRemaining {
-  color: #dc2626;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-body.light-mode #addclass {
-  background: #fef2f2;
-  border-color: #fecaca;
-}
-
-body.light-mode #nextext {
-  color: #dc2626;
-  font-weight: bold;
-}
-
-body.light-mode #nextText {
-  color: #1f2937;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
+@keyframes fade-bg {
+  0% {
+    background: #0f172b;
+    border-color: red;
   }
   50% {
-    opacity: 0.8;
-    transform: scale(1.02);
+    background: transparent;
+    border-color: transparent;
   }
-}
-
-/* أيقونات الصلاة المتحركة */
-.prayer-icon {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.next .prayer-icon {
-  animation: iconBounce 1s ease-in-out infinite;
-}
-
-@keyframes iconBounce {
-  0%, 100% {
-    transform: translateY(0);
+  100% {
+    background: #0f172b;
+    border-color: red;
   }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* تحسين تصميم العناصر في الوضع الفاتح */
-body.light-mode .border-amber-50 {
-  border-color: #cbd5e1;
-}
-
-body.light-mode .bg-slate-900 {
-  background: #ffffff;
-  color: #1f2937;
-}
-
-body.light-mode .text-white {
-  color: #1f2937;
-}
-
-body.light-mode header #headSM {
-  background-color: #ffffff;
-  border-color: #e2e8f0;
-  color: #1f2937;
-}
-
-body.light-mode #headSM h1 {
-  color: #1f2937;
-}
-
-body.light-mode #headSM .fa-mosque {
-  color: #16a34a;
-}
-
-body.light-mode #timesSection li {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  color: #1f2937;
-}
-
-body.light-mode #timesSection li span {
-  color: #1f2937;
-}
-
-/* تصميم نافذة اتجاه القبلة في الوضع النهاري */
-body.light-mode #qiblaModal .bg-slate-800 {
-  background: #ffffff;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-}
-
-body.light-mode #qiblaModal h2 {
-  color: #1f2937;
-}
-
-body.light-mode #qiblaModal .text-white {
-  color: #1f2937;
-}
-
-body.light-mode #qiblaModal .bg-amber-500\/20 {
-  background: #fef3c7;
-  color: #1f2937;
-}
-
-body.light-mode #qiblaModal #qiblaDirection {
-  color: #d97706;
-}
-
-body.light-mode #qiblaModal .fa-kaaba {
-  color: #d97706;
-}
-
-/* تحسين تصميم مؤشرات اتجاه القبلة والهاتف */
-#qiblaPointer {
-  z-index: 10;
-  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
-}
-
-#phoneDirection {
-  z-index: 20;
-  filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
-}
-
-/* تأثير توهج للمؤشرات */
-#qiblaPointer .bg-amber-400 {
-  box-shadow: 0 0 15px rgba(251, 191, 36, 0.9);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-#phoneDirection .bg-blue-400 {
-  box-shadow: 0 0 15px rgba(96, 165, 250, 0.9);
-  animation: pulse-glow 2s ease-in-out infinite 0.5s;
-}
-
-/* تأثير نبض للتوهج */
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1);
-  }
-}
-
-/* تحسين دوائر البوصلة */
-#qiblaModal .border-amber-500\/30 {
-  animation: rotate-border 20s linear infinite;
-}
-
-#qiblaModal .border-amber-500\/50 {
-  animation: rotate-border 15s linear infinite reverse;
-}
-
-#qiblaModal .border-amber-500\/70 {
-  animation: rotate-border 10s linear infinite;
-}
-
-/* تأثير دوران بطيء للدوائر */
-@keyframes rotate-border {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* تحسين المؤشرات في الوضع النهاري */
-body.light-mode #qiblaPointer .bg-amber-400 {
-  box-shadow: 0 0 8px rgba(217, 119, 6, 0.6);
-}
-
-body.light-mode #phoneDirection .bg-blue-400 {
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
 }
 
 @media (max-width: 450px) {
